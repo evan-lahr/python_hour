@@ -1,6 +1,11 @@
 """
 This is an example of using many simultaneous subprocess jobs to
-speed up a task.
+speed up a task.  The concept is that the task has to be easily divided
+into independent jobs, and that then you rely on the ability of modern
+computers to run many jobs simultaneously to speed things up.
+
+One application might be to extract a time series at one spatial point from
+thousands of files which store one snapshot in time of the full spatial field.
 
 Parker MacCready
 """
@@ -12,6 +17,7 @@ from subprocess import PIPE as Pi
 from time import time
 import numpy as np
 
+# sometimes it is helpful to know the PID
 pid = os.getpid()
 print(' subprocess_driver '.center(60,'='))
 print('PID for this job = ' + str(pid))
@@ -30,6 +36,8 @@ Nproc = args.Nproc
 tt0 = time()
 proc_list = []
 for ii in range(N):
+    
+    # the actual "job" is just to sleep for 3 seconds
     cmd_list = ['sleep','3']
     proc = Po(cmd_list, stdout=Pi, stderr=Pi)
     proc_list.append(proc)
